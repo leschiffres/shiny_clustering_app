@@ -1,7 +1,9 @@
 # get shiny serves plus tidyverse packages image
 FROM rocker/shiny-verse:latest
 
+# copy the app to the image
 COPY src/ /srv/shiny-server/
+
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -21,12 +23,6 @@ RUN R -e "install.packages('caret', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('cluster', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('factoextra', repos='http://cran.rstudio.com/')"
 
-
-# copy the app to the image
-# COPY src/server.R /srv/shiny-server/
-# COPY src/ui.R /srv/shiny-server/
-
-
 # select port
 EXPOSE 3838
 
@@ -36,6 +32,8 @@ RUN sudo chown -R shiny:shiny /srv/shiny-server
 # run app
 CMD ["/usr/bin/shiny-server.sh"]
 
+# Build the image
 # docker build -t my-shiny-app .
 
+# Run the container
 # docker run --rm -p 3838:3838 my-shiny-app
